@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
   azureSubscription: 'ServiceConnectionName1'
@@ -13,6 +13,8 @@ jobs:
 - job: DeployVNet
   displayName: 'Deploy VNet'
   steps:
+  - checkout: self
+
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
@@ -25,6 +27,6 @@ jobs:
       action: 'Create Or Update Resource Group'
       resourceGroupName: $(resourceGroupName)
       location: $(location)
-      templateLocation: 'Linked artifact'
-      csmFile: '$(System.DefaultWorkingDirectory)/_Your-Linked-Artifact-Name_/your-vnet-arm-template.json'
+      templateLocation: 'URL of the file(s) to deploy'
+      csmFile: 'https://raw.githubusercontent.com/neelaakhil97/rep1/master/VNET.json'
       overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
