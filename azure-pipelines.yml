@@ -34,5 +34,5 @@ jobs:
       resourceGroupName: $(resourceGroupName)
       location: $(location)
       templateLocation: 'URL of the file'
-      csmFile: 'https://raw.githubusercontent.com/neelaakhil97/rep1/master/VNET.json'
+      csmFile: 'https://raw.githubusercontent.com/neelaakhil97/rep1/main/VNET.json'
       overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
