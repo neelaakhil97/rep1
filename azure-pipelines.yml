@@ -8,7 +8,7 @@ variables:
   azureSubscription: 'ServiceConnectionName1'
   resourceGroupName: 'Akhil_Test'
   location: 'East US'
-  storageAccountName: 'storageaccount1'  # Change to your desired storage account name
+  storageAccountName: 'teststorageaccount387'
   storageContainerName: 'templates'
   vnetName: 'VNet1'
   vnetAddressPrefix: '10.0.0.0/16'
@@ -29,24 +29,14 @@ jobs:
       version: '3.1.x'
       installationPath: $(Agent.ToolsDirectory)/dotnet
 
-  - task: AzureStorageAccount@0
+  - task: AzureFileCopy@5
     inputs:
+      SourcePath: '$(System.DefaultWorkingDirectory)'  # Update with the path to your ARM template folder
       azureSubscription: $(azureSubscription)
-      action: 'Create'
-      resourceGroupName: $(resourceGroupName)
-      storageAccountName: $(storageAccountName)
-      location: $(location)
-      kind: 'StorageV2'
-      sku: 'Standard_LRS'
-
-  - task: AzureFileCopy@4
-    inputs:
-      SourcePath: '$(Build.SourcesDirectory)'
-      azureSubscription: $(azureSubscription)
-      Destination: 'AzureBlob'
+      Destination: 'AzureBlob' 
       storage: $(storageAccountName)
       containerName: $(storageContainerName)
-      BlobPrefix: 'arm-templates/'
+      outputStorageUri: 'outputStorageUri'
 
   - task: AzureResourceGroupDeployment@3
     inputs:
@@ -55,5 +45,5 @@ jobs:
       resourceGroupName: $(resourceGroupName)
       location: $(location)
       templateLocation: 'Linked artifact'
-      csmFile: 'https://storageaccount1.blob.core.windows.net/templates/VNET.json'  # Update with your storage account and file path
+      csmFile: '$(outputStorageUri)/VNET.json'  # Update with your ARM template file name
       overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
