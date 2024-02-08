@@ -23,7 +23,7 @@ jobs:
 
   - task: AzureResourceGroupDeployment@3
     inputs:
-      azureSubscription: $(azureSubscription)
+      ConnectedServiceName: $(azureSubscription)
       action: 'Create Or Update Resource Group'
       resourceGroupName: $(resourceGroupName)
       location: $(location)
