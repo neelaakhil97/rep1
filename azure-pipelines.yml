@@ -28,11 +28,11 @@ jobs:
       installationPath: $(Agent.ToolsDirectory)/dotnet
 
   - task: AzureResourceGroupDeployment@3
-    inputs:
-      ConnectedServiceName: $(azureSubscription)
-      action: 'Create Or Update Resource Group'
-      resourceGroupName: $(resourceGroupName)
-      location: $(location)
-      templateLocation: 'URL of the file'
-      csmFile: 'https://raw.githubusercontent.com/neelaakhil97/rep1/master/VNET.json'
-      overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
+  inputs:
+    azureSubscription: $(azureSubscription)
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: $(resourceGroupName)
+    location: $(location)
+    templateLocation: 'URL of the file'
+    csmFile: 'https://raw.githubusercontent.com/neelaakhil97/rep1/master/VNET.json'
+    overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
