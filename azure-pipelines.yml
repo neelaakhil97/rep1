@@ -29,19 +29,6 @@ jobs:
       version: '3.1.x'
       installationPath: $(Agent.ToolsDirectory)/dotnet
 
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: $(azureSubscription)
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        # Create a URL with the SAS token
-        sasUrl=$(outputStorageUri)?sp=r&st=2024-02-09T20:45:48Z&se=2024-02-10T04:45:48Z&spr=https&sv=2022-11-02&sr=c&sig=VU0OUEyHWn9bFAVNhHBTncktXaByQDBRuvvY%2FRz%2BAVY%3D
-
-        # Use AzCopy to copy files to Azure Storage
-        azcopy copy "$(System.DefaultWorkingDirectory)" "$sasUrl" --recursive=true
-    displayName: 'Copy files to Azure Storage'
-
   - task: AzureResourceGroupDeployment@3
     inputs:
       azureSubscription: $(azureSubscription)
@@ -51,3 +38,13 @@ jobs:
       templateLocation: 'Linked artifact'
       csmFile: '$(outputStorageUri)/VNET.json'
       overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
+
+  - task: AzureFileCopy@4
+    inputs:
+      sourcePath: '$(System.DefaultWorkingDirectory)'
+      azureSubscription: $(azureSubscription)
+      destination: 'AzureBlob'
+      storage: $(storageAccountName)
+      containerName: $(storageContainerName)
+      outputStorageUri: 'outputStorageUri'
+      sasTokenTimeOutInMinutes: 60
