@@ -29,21 +29,21 @@ jobs:
       version: '3.1.x'
       installationPath: $(Agent.ToolsDirectory)/dotnet
 
-  - script: |
-      rem Create a URL with the SAS token
-      set sasUrl=$(outputStorageUri)?sp=r^&st=2024-02-09T20:45:48Z^&se=2024-02-10T04:45:48Z^&spr=https^&sv=2022-11-02^&sr=c^&sig=VU0OUEyHWn9bFAVNhHBTncktXaByQDBRuvvY%2FRz%2BAVY%3D
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: $(azureSubscription)
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Create a URL with the SAS token
+        sasUrl=$(outputStorageUri)?sp=r&st=2024-02-09T20:45:48Z&se=2024-02-10T04:45:48Z&spr=https&sv=2022-11-02&sr=c&sig=VU0OUEyHWn9bFAVNhHBTncktXaByQDBRuvvY%2FRz%2BAVY%3D
 
-      rem Use azcopy with the created URL as the source (BlobLocal)
-      azcopy copy "D:\a\1\s" "%sasUrl%" --recursive=true --from-to=BlobLocal
+        # Use AzCopy to copy files to Azure Storage
+        azcopy copy "$(System.DefaultWorkingDirectory)" "$sasUrl" --recursive=true
     displayName: 'Copy files to Azure Storage'
-    failOnStderr: true
 
   - task: AzureResourceGroupDeployment@3
     inputs:
       azureSubscription: $(azureSubscription)
       action: 'Create Or Update Resource Group'
-      resourceGroupName: $(resourceGroupName)
-      location: $(location)
-      templateLocation: 'Linked artifact'
-      csmFile: '$(outputStorageUri)/VNET.json'
-      overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
+      resource
