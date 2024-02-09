@@ -47,3 +47,4 @@ jobs:
       templateLocation: 'Linked artifact'
       csmFile: '$(outputStorageUri)/VNET.json'
       overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
+
