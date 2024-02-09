@@ -30,7 +30,11 @@ jobs:
       installationPath: $(Agent.ToolsDirectory)/dotnet
 
   - script: |
-      azcopy copy "$(System.DefaultWorkingDirectory)" "$(outputStorageUri)/" --recursive=true --sas="?sp=r&st=2024-02-09T20:45:48Z&se=2024-02-10T04:45:48Z&spr=https&sv=2022-11-02&sr=c&sig=VU0OUEyHWn9bFAVNhHBTncktXaByQDBRuvvY%2FRz%2BAVY%3D"
+      # Create a URL with the SAS token
+      sasUrl=$(outputStorageUri)?sp=r&st=2024-02-09T20:45:48Z&se=2024-02-10T04:45:48Z&spr=https&sv=2022-11-02&sr=c&sig=VU0OUEyHWn9bFAVNhHBTncktXaByQDBRuvvY%2FRz%2BAVY%3D
+
+      # Use azcopy with the created URL as the source
+      azcopy copy "$(System.DefaultWorkingDirectory)" "$sasUrl" --recursive=true
     displayName: 'Copy files to Azure Storage'
     failOnStderr: true
 
