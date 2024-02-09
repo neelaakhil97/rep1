@@ -31,12 +31,13 @@ jobs:
 
   - task: AzureFileCopy@5
     inputs:
-      SourcePath: '$(System.DefaultWorkingDirectory)'  # Update with the path to your ARM template folder
+      SourcePath: '$(System.DefaultWorkingDirectory)'  
       azureSubscription: $(azureSubscription)
       Destination: 'AzureBlob' 
       storage: $(storageAccountName)
       containerName: $(storageContainerName)
       outputStorageUri: 'outputStorageUri'
+      sasToken: '?sp=r&st=2024-02-09T20:45:48Z&se=2024-02-10T04:45:48Z&spr=https&sv=2022-11-02&sr=c&sig=VU0OUEyHWn9bFAVNhHBTncktXaByQDBRuvvY%2FRz%2BAVY%3D'
 
   - task: AzureResourceGroupDeployment@3
     inputs:
@@ -45,5 +46,5 @@ jobs:
       resourceGroupName: $(resourceGroupName)
       location: $(location)
       templateLocation: 'Linked artifact'
-      csmFile: '$(outputStorageUri)/VNET.json'  # Update with your ARM template file name
+      csmFile: '$(outputStorageUri)/VNET.json'
       overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
