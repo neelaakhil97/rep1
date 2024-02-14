@@ -10,4 +10,4 @@ steps:
     azureSubscription: 'ServiceConnectionName1'  # Replace with the name of your Azure service connection
     resourceGroupName: 'Akhil_Test'  # Replace with the name of your resource group
     location: 'East US'  # Replace with the location of your resource group
-    csmFile: 'https://github.com/neelaakhil97/rep1/blob/main/VNET.json'  # Replace with the path to your ARM template in the repository
+    csmFile: 'VNET.json'  # Replace with the path to your ARM template in the repository
