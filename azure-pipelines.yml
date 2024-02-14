@@ -1,50 +1,13 @@
 trigger:
-- main
+- main 
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
-variables:
-  azureSubscription: 'ServiceConnectionName1'
-  resourceGroupName: 'Akhil_Test'
-  location: 'East US'
-  storageAccountName: 'teststorageaccount387'
-  storageContainerName: 'templates'
-  vnetName: 'VNet1'
-  vnetAddressPrefix: '10.0.0.0/16'
-  subnet1Name: 'Subnet1'
-  subnet1Prefix: '10.0.0.0/24'
-  subnet2Name: 'Subnet2'
-  subnet2Prefix: '10.0.1.0/24'
-
-jobs:
-- job: DeployVNet
-  displayName: 'Deploy VNet'
-  steps:
-  - checkout: self
-
-  - task: UseDotNet@2
-    inputs:
-      packageType: 'sdk'
-      version: '3.1.x'
-      installationPath: $(Agent.ToolsDirectory)/dotnet
-
-  - task: AzureResourceGroupDeployment@3
-    inputs:
-      azureSubscription: $(azureSubscription)
-      action: 'Create Or Update Resource Group'
-      resourceGroupName: $(resourceGroupName)
-      location: $(location)
-      templateLocation: 'Linked artifact'
-      csmFile: '$(outputStorageUri)/VNET.json'
-      overrideParameters: '-vnetName $(vnetName) -vnetAddressPrefix $(vnetAddressPrefix) -subnet1Name $(subnet1Name) -subnet1Prefix $(subnet1Prefix) -subnet2Name $(subnet2Name) -subnet2Prefix $(subnet2Prefix) -location $(location)'
-
-  - task: AzureFileCopy@4
-    inputs:
-      sourcePath: '$(System.DefaultWorkingDirectory)'
-      azureSubscription: $(azureSubscription)
-      destination: 'AzureBlob'
-      storage: $(storageAccountName)
-      containerName: $(storageContainerName)
-      outputStorageUri: 'outputStorageUri'
-      sasTokenTimeOutInMinutes: 60
+steps:
+- task: AzureResourceGroupDeployment@2
+  inputs:
+    azureSubscription: 'ServiceConnectionName1'  # Replace with the name of your Azure service connection
+    resourceGroupName: 'Akhil_Test'  # Replace with the name of your resource group
+    location: 'East US'  # Replace with the location of your resource group
+    csmFile: 'https://github.com/neelaakhil97/rep1/blob/main/VNET.json'  # Replace with the path to your ARM template in the repository
