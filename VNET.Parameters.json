@@ -21,7 +21,7 @@
       "value": "Subnet2"
     },
     "location": {
-      "value": "[resourceGroup().location]"
+      "value": "East US"
     }
   }
 }
